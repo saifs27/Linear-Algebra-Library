@@ -2,4 +2,4 @@
 
 class Matrix;
 
-class Vector;
+class Decomposition;

@@ -1,101 +1,139 @@
 #include <vector>
 #include <unordered_map>
 #include <iostream>
+#include <algorithm>
 
 template <typename T>
 class Matrix {
     private:
-        int rows;
-        int columns;
-        std::vector<T> data;
-
-        typedef struct {
-            Matrix<T> lower;
-            Matrix<T> upper;
-        } Matrices;
-
-        typedef struct {
-            int row;
-            int column;
-        } Indices;
+    typedef struct {
+        int rowIndex;
+        int columnIndex;
+    } Indices;
 
     public:
-        std::unordered_map<int, Indices> indices;
+    int rowNum;
+    int columnNum;
+    std::vector<T> data;
+    std::unordered_map<int, Indices> indices_map;
         
-        Matrix<T>(int row_num, int column_num) {
-            rows = row_num;
-            columns = column_num;
-            for (int index = 0; index < rows*columns; index++) {
-                data.push_back(0);
-                Indices i;
-                i.row = (index / (column_num));
-                i.column = index % column_num;
-                indices[index] = i;
+    Matrix<T>(int row_num, int column_num) {
+        rowNum = row_num;
+        columnNum = column_num;
+        for (int key = 0; key < rowNum*columnNum; key++) {
+            data.push_back(0);
+            Indices i;
+            i.rowIndex = (key / (column_num));
+            i.columnIndex = key % column_num;
+            indices_map[key] = i;
+        }
+    }
+
+    int accessElement(int row_index, int column_index) {
+        return row_index * columnNum + column_index;
+    }
+
+    Matrix add(Matrix matrix) {
+        Matrix result(0,0);
+        if ((columnNum != matrix.columnNum) || (rowNum != matrix.rowNum)){
+            return matrix;
+        }
+        for (int i = 0; i < columnNum * rowNum; i++) {
+            result.data.push_back(data[i] + matrix.data[i]);
+        }
+        result.columnNum = columnNum;
+        result.rowNum = rowNum;
+        return result;
+    }
+
+    Matrix multiply(Matrix matrix) {
+        /* Since the matrix is stored in row-major order, 
+        */
+        Matrix result(rowNum, matrix.columnNum);
+        if (columnNum != matrix.rowNum) {return result;}
+        for (int i = 0; i < rowNum; i++) {
+            for (int j = 0; j < matrix.columnNum; j++) {
+                auto sum = 0;
+                for (int k = 0; k < columnNum; k++) {
+                    auto A_ik = data[accessElement(i, k)];
+                    auto B_kj = matrix.data[matrix.accessElement(k, j)];
+                    sum += A_ik * B_kj;
+                }
+                result.data[result.accessElement(i, j)] = sum;
+            }
+        }
+        return result;
+    }
+
+    Matrix transpose() {
+        Matrix result(rowNum, columnNum);
+        for (int i = 0; i < rowNum; i++) {
+            for (int j = 0; j < columnNum; j++) {
+                result.data[result.accessElement(i,j)] = data[accessElement(j,i)];
             }
         }
 
-        int getRowLength() {
-            return rows;
+        return result;
+
+    }
+
+    T trace() {
+        T result = 0;
+        for (int i = 0; i < rowNum; i++) {
+            result += data[accessElement(i, i)];
         }
-
-        int getColumnLength() {
-            return columns;
-        }
-
-        std::vector<float> getElements() {
-            return data;
-        }
-
-        void setRowLength() {
-
-        }
-
-        void insert(int row_index, int column_index) {
-
-        }
-
-        Matrix add(Matrix matrix) {
-            Matrix result(0,0);
-            if ((columns != matrix.columns) || (rows != matrix.rows)){
-                return matrix;
-            }
-            for (int i = 0; i < columns * rows; i++) {
-                result.data.push_back(data[i] + matrix.data[i]);
-            }
-            result.columns = columns;
-            result.rows = rows;
-            return result;
-        }
+        return result;
+    }
 
 
 
-        Matrix multiply(Matrix matrix) {
-            
-        }
+};
 
-        Matrices LU_Decomposition(Matrix m) {
-            
-        }
+template <typename U>
+class Decomposition: Matrix<U> {
+    private:
+    typedef struct {
+        Matrix<U> lower;
+        Matrix<U> upper;
+    } Matrices;
 
+    public:
+    Matrices LU() {
+
+    }
+
+    Matrices cholesky() {
+
+    }
+
+    Matrices LDL() {
+
+    }
+
+    
 };
 
 
 
 int main() {
 
-    Matrix<int> m(3, 2);
+    Matrix<int> m1(2, 2);
+    Matrix<int> m2(2,2);
+    m1.data[0] = 7;
+    m1.data[1] = 5;
+    m1.data[2] = 6;
+    m1.data[3] = 3;
 
+    m2.data[0] = 2;
+    m2.data[1] = 1;
+    m2.data[2] = 5;
+    m2.data[3] = 1;
 
-    for (int i = 0; i < 6; i++){
-        int element = i;
-        int x = m.indices[element].row;
-        int y = m.indices[element].column;
+    Matrix m = m1.transpose();
 
-        std::cout << "element: " << element << "\n";
-        std::cout << "row: " << x << "\n";
-        std::cout << "column: " << y << "\n\n";        
+    for (int i = 0; i < 4; i++){
+    std::cout << m.data[i] << std::endl;
     }
-
 
 
 }
