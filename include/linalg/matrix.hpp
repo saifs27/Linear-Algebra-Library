@@ -3,7 +3,9 @@
 #include <unordered_map>
 #include <tuple>
 
-template <typename T> class Matrix { 
+
+template <typename T> 
+class Matrix { 
     private:
     typedef struct {
         int rowIndex;

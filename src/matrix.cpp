@@ -1,9 +1,5 @@
-
-
 #include <iostream>
-
-
-#include "../include/matrix.hpp"
+#include "../include/linalg/matrix.hpp"
 
 template <class T>
 Matrix<T>::Matrix(int row_num, int column_num){
