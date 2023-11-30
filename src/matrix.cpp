@@ -99,23 +99,3 @@ std::tuple<Matrix<T>, Matrix<T>> SVD() {
 
 
 
-int main() {
-
-    Matrix<int> m1(2, 2);
-    Matrix<int> m2(2,2);
-    m1.data[0] = 7;
-    m1.data[1] = 5;
-    m1.data[2] = 6;
-    m1.data[3] = 3;
-
-    m2.data[0] = 2;
-    m2.data[1] = 1;
-    m2.data[2] = 5;
-    m2.data[3] = 1;
-
-    Matrix<int> m = m1.transpose();
-
-    for (int i = 0; i < 4; i++){
-    std::cout << m.data[i] << std::endl;
-    }
-}
