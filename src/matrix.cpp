@@ -5,13 +5,16 @@ Matrix<T>::Matrix(int row_num, int column_num){
     rowNum = row_num;
     columnNum = column_num;
     for (int key = 0; key < rowNum*columnNum; key++) {
-        data.push_back(0);
+        data.push_back((T)0);
         Indices i;
         i.rowIndex = (key / (column_num));
         i.columnIndex = key % column_num;
         indices_map[key] = i;
     }    
 }
+
+
+
 
 template <typename T>
 T Matrix<T>::at(int row_index, int column_index) {
@@ -30,8 +33,15 @@ void Matrix<T>::print() {
 }
 
 template <typename T>
-T  Matrix<T>::operator()(int x, int y) {
-    
+void Matrix<T>::operator=(std::vector<std::vector<T>> m){
+    data.clear();
+    rowNum = m.size();
+    columnNum = (m[0]).size();
+    for (int i = 0; i < rowNum; i++) {
+        for (int j = 0; j < columnNum; j++) {
+            data.push_back(m[i][j]);
+        }
+    }
 }
 
 
@@ -120,18 +130,25 @@ std::tuple<Matrix<T>, Matrix<T>> Matrix<T>::lu() {
 }
 
 template <typename T>
-std::tuple<Matrix<T>, Matrix<T>> Matrix<T>::cholesky() {
+Matrix<T> Matrix<T>::cholesky() {
     Matrix<T> L(rowNum, columnNum);
-    Matrix<T> U(rowNum, columnNum);    
     int matrix_size = data.size();
     for (int i = 0; i  < matrix_size; i++) {
         for (int j = 0; j < i; j++) {
             auto sum = 0;
             for (int k = 0; k < j; k++) {
-
+                sum += L.at(i, k) * L.at(j, k);
+            }
+            if (i == j) {
+                L.data[access(i, j)] = sqrt(at(i, j) - sum);
+            }
+            else {
+                L.data[access(i, j)] = (1.0 / L.at(j, j) * (at(i, j) - sum)); 
             }
         }
     }
+
+    return L;
 
 }
 
@@ -162,14 +179,17 @@ bool Matrix<T>::isHermitian(){
     if (typeid(T) != typeid(std::complex<double>)) {
         return isSymmetric();
     }
-    Matrix<T> complex_conjugate(rowNum, columnNum);
-    std::complex<double> element;
+    Matrix<std::complex<T>> complex_conjugate(rowNum, columnNum);
+    Matrix<std::complex<T>> result(rowNum, columnNum);
+    std::complex<T> element;
     for (int i = 0; i < data.size(); i++) {
         element = data[i];
         complex_conjugate.data[i] = element.real() - element.imag();
     }
 
-    if (data == complex_conjugate.transpose().data) {return true;}
+    result = complex_conjugate.transpose();
+
+    if (data == result.data) {return true;}
     return false;
 }
 
@@ -182,6 +202,7 @@ template <typename T>
 bool Matrix<T>::isVector(){
 
 }
+
     
 
 

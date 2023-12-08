@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <tuple>
 #include <complex>
+#include <cmath>
 
 
 template <typename T> 
@@ -26,15 +27,16 @@ class Matrix {
     T at(int row_index, int column_index);
     T access(int row_index, int column_index);
     void print();
-    T operator()(int x, int y);
 
+
+   void operator=(std::vector<std::vector<T>> m);
     Matrix<T> operator+(Matrix matrix);
     Matrix<T> operator-(Matrix matrix);
     Matrix<T> operator*(Matrix matrix);
 
     // decompositions
     std::tuple<Matrix<T>, Matrix<T>> lu();
-    std::tuple<Matrix<T>, Matrix<T>> cholesky();
+    Matrix<T> cholesky();
     std::tuple<Matrix<T>, Matrix<T>> ldl();
     std::tuple<Matrix<T>, Matrix<T>> svd();
 
