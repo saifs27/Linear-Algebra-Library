@@ -7,18 +7,18 @@
 
 
 TEST_CASE("matrix", "[Matrix]") {
-    Matrix<int> m1(2,2);
-    Matrix<int> m2(2,2);
+    linalg::Matrix<int> m1(2,2);
+    linalg::Matrix<int> m2(2,2);
 
 
     m1 = {{1, 4}, {3, 7}};
     m2 = {{2, 3}, {5, 6}};
-    Matrix<int> m3 = m1 + m2;
+    linalg::Matrix<int> m3 = m1 + m2;
 
-    Matrix<int> m4(3,2);
+    linalg::Matrix<int> m4(3,2);
     m4 = {{1,2}, {2,3}, {3,6}};
 
-    Matrix<int> m5 = m4 + m4;
+    linalg::Matrix<int> m5 = m4 + m4;
     
     REQUIRE (m1.at(0,0) == 1);
     REQUIRE (m1.trace() == 8);
@@ -30,11 +30,11 @@ TEST_CASE("matrix", "[Matrix]") {
 }
 
 TEST_CASE("matrixType", "[Matrix]") {
-    Matrix<int> square(5,5);
-    Matrix<int> notSquare(3,7);
+    linalg::Matrix<int> square(5,5);
+    linalg::Matrix<int> notSquare(3,7);
 
-    Matrix<int> sym(3,3);
-    Matrix<std::complex<double>> herm(3,3);
+    linalg::Matrix<int> sym(3,3);
+    linalg::Matrix<std::complex<double>> herm(3,3);
 
 
     sym = {{1, 1, -1},
@@ -53,7 +53,7 @@ TEST_CASE("matrixType", "[Matrix]") {
 
     
 
-    Matrix<std::complex<double>> add = herm + herm;
+    linalg::Matrix<std::complex<double>> add = herm + herm;
 
     REQUIRE (square.isSquare() == true);
     REQUIRE (notSquare.isSquare() == false);

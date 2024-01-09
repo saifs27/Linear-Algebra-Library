@@ -4,6 +4,7 @@
 #include <complex>
 #include <cmath>
 
+namespace linalg {
 
 template <typename T> 
 class Matrix { 
@@ -55,3 +56,4 @@ class Matrix {
     bool isDiagonalMatrix();
     bool isVector();
 };
+}

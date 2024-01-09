@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <complex>
-
+namespace linalg {
 template <typename T> 
 class SparseMatrix {
     private:
@@ -15,3 +15,4 @@ class SparseMatrix {
     public:
     SparseMatrix();
 };
+}

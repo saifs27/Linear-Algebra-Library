@@ -1,5 +1,5 @@
 #include "../include/linalg/matrix.hpp"
-
+namespace linalg {
 template <class T>
 Matrix<T>::Matrix(int row_num, int column_num)
     : n_rows(row_num), n_columns(column_num) {
@@ -218,6 +218,7 @@ template <typename T>
 bool Matrix<T>::isVector(){
     if (n_columns == 0) {return true;}
     return false;
+}
 }
 
     
