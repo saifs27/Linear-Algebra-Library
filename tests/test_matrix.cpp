@@ -13,17 +13,20 @@ TEST_CASE("matrix", "[Matrix]") {
 
     m1 = {{1, 4}, {3, 7}};
     m2 = {{2, 3}, {5, 6}};
-
-
-
     Matrix<int> m3 = m1 + m2;
+
+    Matrix<int> m4(3,2);
+    m4 = {{1,2}, {2,3}, {3,6}};
+
+    Matrix<int> m5 = m4 + m4;
     
-    REQUIRE (m1.data[m1.access(0,0)] == 1);
+    REQUIRE (m1.at(0,0) == 1);
     REQUIRE (m1.trace() == 8);
-    REQUIRE (m3.data[m3.access(0,0)] == 3);
-    REQUIRE (m3.data[m3.access(0,1)] == 7);
-    REQUIRE (m3.data[m3.access(1,0)] == 8);
-    REQUIRE (m3.data[m3.access(1,1)] == 13);
+    REQUIRE (m3.at(0,0) == 3);
+    REQUIRE (m3.at(0,1) == 7);
+    REQUIRE (m3.at(1,0) == 8);
+    REQUIRE (m3.at(1,1) == 13);
+    REQUIRE (m5.at(1,0) == 4);
 }
 
 TEST_CASE("matrixType", "[Matrix]") {
