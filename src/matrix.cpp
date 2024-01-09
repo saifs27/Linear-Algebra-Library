@@ -1,15 +1,13 @@
 #include "../include/linalg/matrix.hpp"
 
 template <class T>
-Matrix<T>::Matrix(int row_num, int column_num){
-    rowNum = row_num;
-    columnNum = column_num;
-    for (int key = 0; key < rowNum*columnNum; key++) {
+Matrix<T>::Matrix(int row_num, int column_num)
+    : n_rows(row_num), n_columns(column_num) {
+    for (int key = 0; key < n_rows * n_columns; key++) {
         data.push_back((T)0);
         Indices i;
         i.rowIndex = (key / (column_num));
         i.columnIndex = key % column_num;
-        indices_map[key] = i;
     }    
 }
 
@@ -18,12 +16,12 @@ Matrix<T>::Matrix(int row_num, int column_num){
 
 template <typename T>
 T Matrix<T>::at(int row_index, int column_index) {
-    return data[row_index * columnNum + column_index];
+    return data[row_index * n_columns + column_index];
 }
 
 template <typename T>
 T Matrix<T>::access(int row_index, int column_index) {
-    return row_index * columnNum + column_index;
+    return row_index * n_columns + column_index;
 }
 
 
@@ -33,37 +31,39 @@ void Matrix<T>::print() {
 }
 
 template <typename T>
-void Matrix<T>::operator=(std::vector<std::vector<T>> m){
-    data.clear();
-    rowNum = m.size();
-    columnNum = (m[0]).size();
-    for (int i = 0; i < rowNum; i++) {
-        for (int j = 0; j < columnNum; j++) {
-            data.push_back(m[i][j]);
+Matrix<T> Matrix<T>::operator=(std::vector<std::vector<T>> m){  
+    int n_rows = m.size();
+    int n_columns = (m[0]).size();
+    Matrix<T> result(n_rows, n_columns);
+
+    for (int i = 0; i < n_rows; i++) {
+        for (int j = 0; j < n_columns; j++) {
+            result.data.push_back(m[i][j]);
         }
     }
+    return result;
 }
 
 
 template <typename T>
 Matrix<T> Matrix<T>::operator+(Matrix matrix){
     Matrix<T> result(0,0);
-    for (int i = 0; i < columnNum * rowNum; i++) {
+    for (int i = 0; i < n_columns * n_rows; i++) {
         result.data.push_back(data[i] + matrix.data[i]);
     }
-    result.columnNum = columnNum;
-    result.rowNum = rowNum;
+    result.n_columns = n_columns;
+    result.n_rows = n_rows;
     return result;
 }
 
 template <typename T>
 Matrix<T> Matrix<T>::operator-(Matrix matrix){
     Matrix<T> result(0,0);
-    for (int i = 0; i < columnNum * rowNum; i++) {
+    for (int i = 0; i < n_columns * n_rows; i++) {
         result.data.push_back(data[i] - matrix.data[i]);
     }
-    result.columnNum = columnNum;
-    result.rowNum = rowNum;
+    result.n_columns = n_columns;
+    result.n_rows = n_rows;
     return result;
 }
 
@@ -72,12 +72,12 @@ template <typename T>
 Matrix<T> Matrix<T>::operator*(Matrix matrix) {
     /* Since the matrix is stored in row-major order, 
     */
-    Matrix<T> result(rowNum, matrix.columnNum);
-    if (columnNum != matrix.rowNum) {return result;}
-    for (int i = 0; i < rowNum; i++) {
-        for (int j = 0; j < matrix.columnNum; j++) {
+    Matrix<T> result(n_rows, matrix.n_columns);
+    if (n_columns != matrix.n_rows) {return result;}
+    for (int i = 0; i < n_rows; i++) {
+        for (int j = 0; j < matrix.n_columns; j++) {
             auto sum = 0;
-            for (int k = 0; k < columnNum; k++) {
+            for (int k = 0; k < n_columns; k++) {
                 auto A_ik = at(i, k);
                 auto B_kj = matrix.at(k, j);
                 sum += A_ik * B_kj;
@@ -95,9 +95,9 @@ T Matrix<T>::determinant() {
 
 template <typename T>
 Matrix<T> Matrix<T>::transpose() {
-    Matrix<T> result(rowNum, columnNum);
-    for (int i = 0; i < rowNum; i++) {
-        for (int j = 0; j < columnNum; j++) {
+    Matrix<T> result(n_rows, n_columns);
+    for (int i = 0; i < n_rows; i++) {
+        for (int j = 0; j < n_columns; j++) {
             result.data[access(i, j)] = at(j, i);
         }
     }
@@ -105,22 +105,34 @@ Matrix<T> Matrix<T>::transpose() {
     }
 
 template <typename T>
+Matrix<T> Matrix<T>::ctranspose() {
+    Matrix<T> result(n_rows, n_columns);
+    
+}
+
+template <typename T>
 T Matrix<T>::trace() {
     T result = 0;
-    for (int i = 0; i < rowNum; i++) {
+    for (int i = 0; i < n_rows; i++) {
         result += at(i, i);
     }
     return result;
 }
 
+template <typename T>
+int Matrix<T>::rank(){
+    int result = 0;
+    
+}
+
 
 template <typename T>
 std::tuple<Matrix<T>, Matrix<T>> Matrix<T>::lu() {
-    Matrix<T> L(rowNum, columnNum);
-    Matrix<T> U(rowNum, columnNum);
+    Matrix<T> L(n_rows, n_columns);
+    Matrix<T> U(n_rows, n_columns);
 
-    for (int i = 0; i < rowNum; i++) {
-        for (int j = 0; j < rowNum; j++) {
+    for (int i = 0; i < n_rows; i++) {
+        for (int j = 0; j < n_rows; j++) {
             if (i >= j) {
     
             }
@@ -131,7 +143,7 @@ std::tuple<Matrix<T>, Matrix<T>> Matrix<T>::lu() {
 
 template <typename T>
 Matrix<T> Matrix<T>::cholesky() {
-    Matrix<T> L(rowNum, columnNum);
+    Matrix<T> L(n_rows, n_columns);
     int matrix_size = data.size();
     for (int i = 0; i  < matrix_size; i++) {
         for (int j = 0; j < i; j++) {
@@ -163,7 +175,7 @@ std::tuple<Matrix<T>, Matrix<T>> Matrix<T>::svd() {
 
 template <typename T>
 bool Matrix<T>::isSquare(){
-    if (rowNum == columnNum) { return true;}
+    if (n_rows == n_columns) { return true;}
     return false;
 }
 template <typename T>
@@ -179,8 +191,8 @@ bool Matrix<T>::isHermitian(){
     if (typeid(T) != typeid(std::complex<double>)) {
         return isSymmetric();
     }
-    Matrix<std::complex<T>> complex_conjugate(rowNum, columnNum);
-    Matrix<std::complex<T>> result(rowNum, columnNum);
+    Matrix<std::complex<T>> complex_conjugate(n_rows, n_columns);
+    Matrix<std::complex<T>> result(n_rows, n_columns);
     std::complex<T> element;
     for (int i = 0; i < data.size(); i++) {
         element = data[i];
@@ -195,12 +207,17 @@ bool Matrix<T>::isHermitian(){
 
 template <typename T>
 bool Matrix<T>::isDiagonalMatrix(){
-
+    for (int i = 0; i < n_rows; i++) {
+        for (int j = 0; j < n_columns; j++) {
+            
+        }
+    }
 }
 
 template <typename T>
 bool Matrix<T>::isVector(){
-
+    if (n_columns == 0) {return true;}
+    return false;
 }
 
     

@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <unordered_map>
 #include <tuple>
 #include <complex>
 #include <cmath>
@@ -15,11 +14,9 @@ class Matrix {
     } Indices;
     
     public:
-    int rowNum;
-    int columnNum;
+    int n_rows;
+    int n_columns;
     std::vector<T> data;
-    
-    std::unordered_map<int, Indices> indices_map;
 
     Matrix(int row_num, int column_num);
 
@@ -29,7 +26,7 @@ class Matrix {
     void print();
 
 
-   void operator=(std::vector<std::vector<T>> m);
+    Matrix<T> operator=(std::vector<std::vector<T>> m);
     Matrix<T> operator+(Matrix matrix);
     Matrix<T> operator-(Matrix matrix);
     Matrix<T> operator*(Matrix matrix);
@@ -43,14 +40,18 @@ class Matrix {
 
     T determinant();
     Matrix<T> transpose();
+    Matrix<T> ctranspose(); // complex conjugate transpose
     T trace();
+    int rank();
+    T eigenvalues();
+    std::vector<T> eigenvectors();
+
+    Matrix<T> triangularLower();
+    Matrix<T> triangularUpper();
 
     bool isSquare();
     bool isSymmetric();
     bool isHermitian();
     bool isDiagonalMatrix();
     bool isVector();
-
-
-
 };
