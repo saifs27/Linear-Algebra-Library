@@ -31,17 +31,17 @@ void Matrix<T>::print() {
 }
 
 template <typename T>
-Matrix<T> Matrix<T>::operator=(std::vector<std::vector<T>> m){  
+void Matrix<T>::operator=(std::vector<std::vector<T>> m){  
     int n_rows = m.size();
     int n_columns = (m[0]).size();
-    Matrix<T> result(n_rows, n_columns);
 
+    data.clear();
     for (int i = 0; i < n_rows; i++) {
         for (int j = 0; j < n_columns; j++) {
-            result.data.push_back(m[i][j]);
+            data.push_back(m[i][j]);
         }
     }
-    return result;
+
 }
 
 

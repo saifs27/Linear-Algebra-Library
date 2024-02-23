@@ -24,10 +24,13 @@ class Matrix {
 
     T at(int row_index, int column_index);
     T access(int row_index, int column_index);
+    int row(int i) {return i / n_columns;};
+    int column(int i) {return i % n_columns;};
+    int size() {return data.size();};
     void print();
 
 
-    Matrix<T> operator=(std::vector<std::vector<T>> m);
+    void operator=(std::vector<std::vector<T>> m);
     Matrix<T> operator+(Matrix matrix);
     Matrix<T> operator-(Matrix matrix);
     Matrix<T> operator*(Matrix matrix);

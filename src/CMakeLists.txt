@@ -1,10 +1,10 @@
 set(HEADER_LIST "${LinearAlgebraLibrary_SOURCE_DIR}/include/linalg/matrix.hpp")
 
-add_library(linear_algebra matrix.cpp ${HEADER_LIST})
+add_library(linear_algebra matrix.cpp sparse.cpp ${HEADER_LIST})
 
 target_include_directories(linear_algebra PUBLIC ../include)
 
-target_compile_features(linear_algebra PUBLIC cxx_std_11)
+target_compile_features(linear_algebra PUBLIC cxx_std_17)
 
 source_group(
   TREE "${PROJECT_SOURCE_DIR}/include"
