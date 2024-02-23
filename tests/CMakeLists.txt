@@ -7,7 +7,7 @@ FetchContent_MakeAvailable(Catch2)
 # Adds Catch2::Catch2
 
 # Tests need to be added as executables first
-add_executable(testlib test_matrix.cpp)
+add_executable(testlib test_matrix.cpp test_sparse.cpp)
 
 target_compile_features(testlib PRIVATE cxx_std_17)
 

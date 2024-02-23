@@ -10,8 +10,8 @@ TEST_CASE("matrix", "[Matrix]") {
     linalg::Matrix<int> m1(2,2);
     linalg::Matrix<int> m2(2,2);
 
-
     m1 = {{1, 4}, {3, 7}};
+    
     m2 = {{2, 3}, {5, 6}};
     linalg::Matrix<int> m3 = m1 + m2;
 
